@@ -164,6 +164,17 @@ function readspeaker_hl_form($form, &$form_state) {
     '#description' => t('Enter your ReadSpeaker ID from <a href="https://admin.readspeaker.com/portal" target="_blank">https://admin.readspeaker.com/portal</a>.'),
     '#required' => TRUE,
   );
+  $form['general_settings']['readspeaker_voice'] = array(
+    '#type' => 'select',
+    '#title' => t('Voice'),
+    '#default_value' => variable_get('readspeaker_voice', ''),
+    '#options' => array(
+      'Karen' => t('Karen'),
+      'Lee' => t('Lee')
+    ),
+    '#description' => t('Select the voice for ReadSpeaker to use.'),
+    '#required' => TRUE.
+  );
   $form['general_settings']['readspeaker_langid'] = array(
     '#type' => 'select',
     '#title' => t('Language'),
@@ -253,89 +264,6 @@ function readspeaker_hl_permission() {
 }
 
 /**
- * Implements hook_node_view().
- *
- * Insert 'ReadSpeaker' theme functions into the currently active theme
- */
-function readspeaker_hl_node_view($node, $build_mode = 'full') {
-	$node->content['readspeaker_hl'] = array(
-		'#markup' => theme('readspeaker_hl_button'),
-		'#weight' => -1,
-	);
-	$node->content['readspeaker_hl_end'] = array(
-		'#markup' => theme('readspeaker_hl_end'),
-		'#weight' => 1,
-	);
-}
-
-function readspeaker_hl_theme() {
-	return array(
-		'readspeaker_hl_button' => array(
-			'variables' => array('node' => NULL),
-		),
-		'readspeaker_hl_end' => array(
-			'variables' => array('node' => NULL),
-		),
-	);
-}
-
-/**
- * Implements the ReadSpeaker Button
- */
-
-function theme_readspeaker_hl_button() {
-
-	if (user_access('display readspeaker_hl')) {
-
-		global $language;
-		global $base_path;
-		
-		// Do nothing, if nodetype isn't selected or ReadSpeaker ID isn't set
-		$node_types = variable_get('readspeaker_nodes', array());
-		$accountid = variable_get('readspeaker_accountid', '');
-		$node = menu_get_object();
-		
-		if (isset($_SERVER["HTTPS"])) {
-			$protocol = 'https';
-		}
-		else {
-			$protocol = 'http';
-    }
-		if (empty($node->type) || empty($accountid)) {
-			return;
-		}
-		if (variable_get('readspeaker_buttonstyle', FALSE)) {
-			$button_style = " style='" . variable_get('readspeaker_buttonstyle', FALSE) . "'";
-		}
-		else {
-			$button_style = "";
-		}
-		$readspeaker_languages = readspeaker_hl_language_list();
-		$langid = variable_get('readspeaker_langid', FALSE);
-
-		
-		$nodeurl = $protocol . '://' . $_SERVER['SERVER_NAME'] . url('node/' . $node->nid);
-		
-		// Create output
-		$output = '<!-- RS_MODULE_CODE -->';
-		$output .= '<div id="readspeaker_button1" class="rs_skip rsbtn rs_preserve"'.$button_style.'>';
-		$output .= '<a class="rsbtn_play" title="' . $readspeaker_languages[$langid]['alttext'] . '" accesskey="L" href="' . $protocol . '://app.eu.readspeaker.com/cgi-bin/rsent?customerid=' . $accountid . '&amp;lang=' . $readspeaker_languages[$langid]['langid'] . '&amp;readid=rs_read_this&amp;url=' . urlencode($nodeurl) . '">';
-		$output .= '<span class="rsbtn_left rsimg rspart"><span class="rsbtn_text"><span>Listen</span></span></span>';
-		$output .= '<span class="rsbtn_right rsimg rsplay rspart"></span>';
-		$output .= '</a></div>';
-		$output .= '<div id="rs_read_this">';
-		
-		return $output;
-	
-	}
-}
-
-function theme_readspeaker_hl_end() {
-	$output = '</div>';
-	return $output;
-}
-
-/**
  * Implement hook_block_info();
  */
 function readspeaker_hl_block_info() {
@@ -374,6 +302,9 @@ function _generate_block_content($current_path) {
   $readspeaker_languages = readspeaker_hl_language_list();
 	// Variable set by admin
   $langid = variable_get('readspeaker_langid', FALSE);
+  // Varriable set by admin
+  $voice_admin = variable_get('readspeaker_voice', 'Lee');
+
 
   if(!$langid){
     drupal_set_message(t('Please select a Language ID'));
@@ -396,7 +327,7 @@ function _generate_block_content($current_path) {
   $readspeaker_base_url = 'http://app.as.reaspeaker.com/cgi-bin/rsent?';
   $customer_id = 'customerid='.$accountid;
   $language = 'lang='.$langid;
-  $voice = 'voice=Lee';
+  $voice = 'voice='.$voice_admin;
   $readid = 'readid=l2_txt_2col';
   $url = 'url='.$content_path;
 

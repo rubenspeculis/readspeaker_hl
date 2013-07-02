@@ -164,6 +164,17 @@ function readspeaker_hl_form($form, &$form_state) {
     '#description' => t('Enter your ReadSpeaker ID from <a href="https://admin.readspeaker.com/portal" target="_blank">https://admin.readspeaker.com/portal</a>.'),
     '#required' => TRUE,
   );
+  $form['general_settings']['readspeaker_voice'] = array(
+    '#type' => 'select',
+    '#title' => t('Voice'),
+    '#default_value' => variable_get('readspeaker_voice', ''),
+    '#options' => array(
+      'Karen' => t('Karen'),
+      'Lee' => t('Lee')
+    ),
+    '#description' => t('Select the voice for ReadSpeaker to use.'),
+    '#required' => TRUE,
+  );
   $form['general_settings']['readspeaker_langid'] = array(
     '#type' => 'select',
     '#title' => t('Language'),
@@ -291,6 +302,9 @@ function _generate_block_content($current_path) {
   $readspeaker_languages = readspeaker_hl_language_list();
 	// Variable set by admin
   $langid = variable_get('readspeaker_langid', FALSE);
+  // Varriable set by admin
+  $voice_admin = variable_get('readspeaker_voice', 'Lee');
+
 
   if(!$langid){
     drupal_set_message(t('Please select a Language ID'));
@@ -313,7 +327,7 @@ function _generate_block_content($current_path) {
   $readspeaker_base_url = 'http://app.as.reaspeaker.com/cgi-bin/rsent?';
   $customer_id = 'customerid='.$accountid;
   $language = 'lang='.$langid;
-  $voice = 'voice=Lee';
+  $voice = 'voice='.$voice_admin;
   $readid = 'readid=l2_txt_2col';
   $url = 'url='.$content_path;
 
