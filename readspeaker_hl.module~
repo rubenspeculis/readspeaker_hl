@@ -173,7 +173,7 @@ function readspeaker_hl_form($form, &$form_state) {
       'Lee' => t('Lee')
     ),
     '#description' => t('Select the voice for ReadSpeaker to use.'),
-    '#required' => TRUE.
+    '#required' => TRUE,
   );
   $form['general_settings']['readspeaker_langid'] = array(
     '#type' => 'select',
@@ -274,6 +274,32 @@ function readspeaker_hl_block_info() {
 }
 
 /**
+ * Implement hook_block_configure();
+ */
+function readspeaker_hl_block_configure($delta) {
+  $form = array();
+  if($delta == 'readspeaker_hl'){
+    $form['readspeaker_targetid'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Target ID for readspeaker'),
+      '#size' => 60,
+      '#description' => t('Select the target ID for ReadSpeaker to read. e.g. main. Do not include the "#"'),
+      '#default_value' => variable_get('readspeaker_targetid'),
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implement hook_block_save();
+ */
+function readspeaker_hl_block_save($delta, $edit = array()){
+  if($delta == 'readspeaker_hl') {
+    variable_set('readspeaker_targetid', str_replace('#', '', $edit['readspeaker_targetid']));
+  }
+}
+
+/**
  * Implement hook_block_view();
  */
 function readspeaker_hl_block_view($delta) {
@@ -304,7 +330,8 @@ function _generate_block_content($current_path) {
   $langid = variable_get('readspeaker_langid', FALSE);
   // Varriable set by admin
   $voice_admin = variable_get('readspeaker_voice', 'Lee');
-
+  // Target set in module config
+  $module_targetid = variable_get('readspeaker_targetid', 'main');
 
   if(!$langid){
     drupal_set_message(t('Please select a Language ID'));
@@ -328,7 +355,7 @@ function _generate_block_content($current_path) {
   $customer_id = 'customerid='.$accountid;
   $language = 'lang='.$langid;
   $voice = 'voice='.$voice_admin;
-  $readid = 'readid=l2_txt_2col';
+  $readid = 'readid='.$module_targetid;
   $url = 'url='.$content_path;
 
   $readspeaker_href = $readspeaker_base_url . $customer_id . '&' . $language . '&' . $voice . '&' . $readid . '&' . $url;
