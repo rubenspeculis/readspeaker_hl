@@ -16,11 +16,10 @@
 function readspeaker_hl_install() {
   variable_set('readspeaker_accountid', '');
   variable_set('readspeaker_langid', '');
+  variable_set('readspeaker_prefer_uk', FALSE);
   variable_set('readspeaker_buttonstyle', FALSE);
   variable_set('readspeaker_playerstyle', FALSE);
   variable_set('readspeaker_nodes', array());
-  varrible_set('readspeaker_targetid', '#main');
-  varrible_set('readspeaker_voice', array());
 }
 
 /**
@@ -31,9 +30,8 @@ function readspeaker_hl_install() {
 function readspeaker_hl_uninstall() {
   variable_del('readspeaker_accountid');
   variable_del('readspeaker_langid');
+  variable_del('readspeaker_prefer_uk');
   variable_del('readspeaker_buttonstyle');
   variable_del('readspeaker_playerstyle');
   variable_del('readspeaker_nodes');
-  varrible_del('readspeaker_targetid');
-  varrible_set('readspeaker_voice');
 }
