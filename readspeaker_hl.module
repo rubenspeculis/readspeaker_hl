@@ -253,97 +253,6 @@ function readspeaker_hl_permission() {
 }
 
 /**
- * Implements hook_node_view().
- *
- * Insert 'ReadSpeaker' theme functions into the currently active theme
- */
-function readspeaker_hl_node_view($node, $build_mode = 'full') {
-	$node->content['readspeaker_hl'] = array(
-		'#markup' => theme('readspeaker_hl_button'),
-		'#weight' => -1,
-	);
-	$node->content['readspeaker_hl_end'] = array(
-		'#markup' => theme('readspeaker_hl_end'),
-		'#weight' => 1,
-	);
-}
-
-function readspeaker_hl_theme() {
-	return array(
-		'readspeaker_hl_button' => array(
-			'variables' => array('node' => NULL),
-		),
-		'readspeaker_hl_end' => array(
-			'variables' => array('node' => NULL),
-		),
-	);
-}
-
-/**
- * Implements the ReadSpeaker Button
- */
-
-function theme_readspeaker_hl_button() {
-
-	if (user_access('display readspeaker_hl')) {
-
-		global $language;
-		global $base_path;
-		
-		// Do nothing, if nodetype isn't selected or ReadSpeaker ID isn't set
-		$node_types = variable_get('readspeaker_nodes', array());
-		$accountid = variable_get('readspeaker_accountid', '');
-		$node = menu_get_object();
-		
-		if (isset($_SERVER["HTTPS"])) {
-			$protocol = 'https';
-		}
-		else {
-			$protocol = 'http';
-    }
-		if (empty($node->type) || empty($accountid)) {
-			return;
-		}
-		if (variable_get('readspeaker_buttonstyle', FALSE)) {
-			$button_style = " style='" . variable_get('readspeaker_buttonstyle', FALSE) . "'";
-		}
-		else {
-			$button_style = "";
-		}
-		$readspeaker_languages = readspeaker_hl_language_list();
-		$langid = variable_get('readspeaker_langid', FALSE);
-		if (variable_get('readspeaker_customparam', FALSE))
-		{
-			$customParam = "&".variable_get('readspeaker_customparam', FALSE);
-		} else {
-			$customParam = "";
-		}
-
-		// Add javascript to header
-		drupal_add_js($protocol."://f1.eu.readspeaker.com/script/$accountid/ReadSpeaker.js?cid=$accountid&pids=embhl$customParam", 'external');
-		
-		$nodeurl = $protocol . '://' . $_SERVER['SERVER_NAME'] . url('node/' . $node->nid);
-		
-		// Create output
-		$output = '<!-- RS_MODULE_CODE -->';
-		$output .= '<div id="readspeaker_button1" class="rs_skip rsbtn rs_preserve"'.$button_style.'>';
-		$output .= '<a class="rsbtn_play" title="' . $readspeaker_languages[$langid]['alttext'] . '" accesskey="L" href="' . $protocol . '://app.eu.readspeaker.com/cgi-bin/rsent?customerid=' . $accountid . '&amp;lang=' . $readspeaker_languages[$langid]['langid'] . '&amp;readid=rs_read_this&amp;url=' . urlencode($nodeurl) . '">';
-		$output .= '<span class="rsbtn_left rsimg rspart"><span class="rsbtn_text"><span>Listen</span></span></span>';
-		$output .= '<span class="rsbtn_right rsimg rsplay rspart"></span>';
-		$output .= '</a></div>';
-		$output .= '<div id="rs_read_this">';
-		
-		return $output;
-	
-	}
-}
-
-function theme_readspeaker_hl_end() {
-	$output = '</div>';
-	return $output;
-}
-
-/**
  * Implement hook_block_info();
  */
 function readspeaker_hl_block_info() {
@@ -357,19 +266,27 @@ function readspeaker_hl_block_info() {
  * Implement hook_block_view();
  */
 function readspeaker_hl_block_view($delta) {
-  $current_path = current_path();
-  switch ($delta) {
-    case 'readspeaker_hl':
-      $block['content'] = _generate_block_content($current_path);
-      break;
+  //Check is user can see block
+  if (user_access('display readspeaker_hl')) {
+    // Get current node path;
+    $current_path = current_path();
+    // If this is readspeker block then:
+    switch ($delta) {
+      case 'readspeaker_hl':
+        // Set block contents from the internal function
+        $block['content'] = _generate_block_content($current_path);
+        break;
+    }
+    return $block; 
   }
-  return $block; 
 }
 
 function _generate_block_content($current_path) {
   GLOBAL $base_url;
+  // Get the node type that are to have the block rendered
+  $node_types = variable_get('readspeaker_nodes', array());
   // User ID set by Admin
-  $accountid = variable_get('readspeaker_accountid', '');
+  $accountid = variable_get('readspeaker_accountid', 'FALSE');
   // Array of all Languages
   $readspeaker_languages = readspeaker_hl_language_list();
 	// Variable set by admin
@@ -379,7 +296,18 @@ function _generate_block_content($current_path) {
     drupal_set_message(t('Please select a Language ID'));
     return;
   }
+  if(empty($node_types) OR !$accountid){
+    watchdog('readespeaker_hl', 'Account ID or Node types not selected', WATCHDOG_NOTICE);
+    return;
+  }
 
+	if (variable_get('readspeaker_customparam', FALSE))	{
+		$customParam = "&".variable_get('readspeaker_customparam', FALSE);
+	} else {
+		$customParam = "";
+	}
+
+  // Set variables for url call.
   $content_path = $base_url . '/' . $current_path;
   $content_path = urlencode($content_path);
   $readspeaker_base_url = 'http://app.as.reaspeaker.com/cgi-bin/rsent?';
@@ -391,7 +319,24 @@ function _generate_block_content($current_path) {
 
   $readspeaker_href = $readspeaker_base_url . $customer_id . '&' . $language . '&' . $voice . '&' . $readid . '&' . $url;
 
-  $html  = '<div id="readspeaker_button1" class="rs_skip rsbtn rs_preserve">';
+	if (variable_get('readspeaker_buttonstyle', FALSE)) {
+		$button_style = " style='" . variable_get('readspeaker_buttonstyle', FALSE) . "'";
+	}
+	else {
+		$button_style = "";
+	}
+
+	if (isset($_SERVER["HTTPS"])) {
+		$protocol = 'https';
+	}
+	else {
+		$protocol = 'http';
+   }
+	// Add javascript to header
+	drupal_add_js($protocol."://f1.eu.readspeaker.com/script/$accountid/ReadSpeaker.js?cid=$accountid&pids=embhl$customParam", 'external');
+
+  // HTML
+  $html  = '<div id="readspeaker_button1" class="rs_skip rsbtn rs_preserve"'.$button_style.'>';
   $html .= '<a class="rsbtn_play" accesskey="L" title="'.$readspeaker_languages[$langid]['alttext'].'" href="'.$readspeaker_href.'">';
   $html .= '<span class="rsbtn_left rsimg rspart"><span class="rsbtn_text"><span>Listen</span></span></span>';
   $html .= '<span class="rsbtn_right rsimg rsplay rspart"></span>';
