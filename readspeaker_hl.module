@@ -122,11 +122,6 @@ function readspeaker_hl_language_list() {
 	),
   );
 
-  $readspeaker_prefer_uk = variable_get('readspeaker_prefer_uk', FALSE);
-  if ($readspeaker_prefer_uk) {
-    $readspeaker_languages['en']['langid'] = 'en_au';
-  }
-
   return $readspeaker_languages;
 }
 
@@ -176,39 +171,32 @@ function readspeaker_hl_form($form, &$form_state) {
     '#options' => array(
       'en' => t('American English'),
       'en_au' => t('Australian English'),
-		'ar' => t('Arabic'),
-		'eu' => t('Basque'),
-		'ca' => t('Catalan'),
-		'da' => t('Danish'),
-		'nl' => t('Dutch'),
-		'fo' => t('Faroese'),
-		'fi' => t('Finnish'),
-		'fr' => t('French'),
-		'fy' => t('Frisian'),
-		'gl' => t('Galician'),
-		'de' => t('German'),
-		'el' => t('Greek'),
-		'hi' => t('Hindi'),
-		'it' => t('Italian'),
-		'jp' => t('Japanese'),
-		'ko' => t('Korean'),
-		'zh' => t('Mandarin Chinese'),
-		'nb' => t('Norwegian'),
-		'pt' => t('Portuguese'),
-		'ru' => t('Russian'),
-		'es' => t('Spanish'),
-		'sv' => t('Swedish'),
-		'tr' => t('Turkish'),
-	),
+      'ar' => t('Arabic'),
+      'eu' => t('Basque'),
+      'ca' => t('Catalan'),
+      'da' => t('Danish'),
+      'nl' => t('Dutch'),
+      'fo' => t('Faroese'),
+      'fi' => t('Finnish'),
+      'fr' => t('French'),
+      'fy' => t('Frisian'),
+      'gl' => t('Galician'),
+      'de' => t('German'),
+      'el' => t('Greek'),
+      'hi' => t('Hindi'),
+      'it' => t('Italian'),
+      'jp' => t('Japanese'),
+      'ko' => t('Korean'),
+      'zh' => t('Mandarin Chinese'),
+      'nb' => t('Norwegian'),
+      'pt' => t('Portuguese'),
+      'ru' => t('Russian'),
+      'es' => t('Spanish'),
+      'sv' => t('Swedish'),
+      'tr' => t('Turkish'),
+    ),
     '#description' => t('Select which language your ReadSpeaker account supports.'),
     '#required' => TRUE,
-  );
-  $form['general_settings']['readspeaker_prefer_uk'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Prefer british english'),
-    '#default_value' => variable_get('readspeaker_prefer_uk', FALSE),
-    '#description' => t('Check this option, if you prefer british english and it is available on your account.'),
-    '#required' => FALSE,
   );
 
   // Layout settings for input ReadSpeaker into node

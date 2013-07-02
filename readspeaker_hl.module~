@@ -124,7 +124,7 @@ function readspeaker_hl_language_list() {
 
   $readspeaker_prefer_uk = variable_get('readspeaker_prefer_uk', FALSE);
   if ($readspeaker_prefer_uk) {
-    $readspeaker_languages['en']['langid'] = 'en_uk';
+    $readspeaker_languages['en']['langid'] = 'en_au';
   }
 
   return $readspeaker_languages;
