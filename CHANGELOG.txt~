@@ -2,14 +2,6 @@
 
 Changelog for Drupal ReadSpeaker module
 
-Release 7.x 2.0
- Major
-   - Modified module to use blocks instead of hook_node_view(). This allows greater flexibility of placement.
- Minor 
-   - Added Voice selection to module config.
-   - Added Australian English to Language Selection
-   - Added TargeId to block configuration.
-
 Release 7.x 1.1
  - Upgraded module to support our new ReadSpeaker Enterprise Highlighting product
 
