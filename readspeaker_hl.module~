@@ -1,0 +1,359 @@
+<?php
+
+// $Id: readspeaker_hl.module,v 1.2 2011/02/01 10:49:09 rsp Exp $
+
+/**
+ * @file
+ * Insert readspeaker capabilities to selected node types.
+ *
+ * @ingroup readspeaker
+ */
+
+/**
+ * Returns ReadSpeaker supported languages and switch between 'en_us' and 'en_uk' if configured
+ *
+ */
+function readspeaker_hl_language_list() {
+
+  $readspeaker_languages = array(
+	'ar' => array(
+	  'langid' => 'ar_ar',
+	  'alttext' => urldecode('ReadSpeaker%20%D8%A7%D9%8E%D8%B3%D8%AA%D9%85%D8%B9%D9%8F%20%D8%A5%D9%84%D9%89%20%D9%87%D8%B0%D9%87%20%D8%A7%D9%84%D8%B5%D9%81%D8%AD%D8%A9%D9%90%20%D9%85%D8%B3%D8%AA%D8%AE%D8%AF%D9%85%D8%A7'),
+	),
+	'ca' => array(
+	  'langid' => 'ca_es',
+	  'alttext' => 'Escolteu aquesta plana utilitzant ReadSpeaker',
+	),
+	'da' => array(
+	  'langid' => 'da_dk',
+	  'alttext' => 'Lyt til denne side med ReadSpeaker',
+	),
+    'de' => array(
+      'langid' => 'de_de',
+      'alttext' => 'Um den Text anzuh&ouml;ren, verwenden Sie bitte ReadSpeaker',
+    ),
+    'en' => array(
+      'langid' => 'en_us',
+      'alttext' => 'Listen to this page using ReadSpeaker',
+    ),
+    'en_au' => array(
+      'langid' => 'en_au',
+      'alttext' => 'Listen to this page using ReadSpeaker',
+    ),
+    'es' => array(
+      'langid' => 'es_es',
+      'alttext' => 'Escucha esta p&aacute;gina utilizando ReadSpeaker',
+    ),
+    'eu' => array(
+      'langid' => 'es_eu',
+      'alttext' => 'Orri hau entzun ReadSpeaker erabiliz',
+    ),
+    'fi' => array(
+      'langid' => 'fi_fi',
+      'alttext' => 'Kuuntele ReadSpeakerilla',
+    ),
+	'fo' => array(
+	  'langid' => 'fo_fo',
+	  'alttext' => 'Lurta eftir tekstinum &aacute; s&iacute;&eth;uni vi&eth; ReadSpeaker',
+	),
+    'fr' => array(
+      'langid' => 'fr_fr',
+      'alttext' => 'Ecoutez le texte avec ReadSpeaker',
+    ),
+	'fy' => array(
+	  'langid' => 'fy_nl',
+	  'alttext' => 'Listen to this page using ReadSpeaker',
+	),
+	'gl' => array(
+	  'langid' => 'gl_es',
+	  'alttext' => 'Listen to this page using ReadSpeaker',
+	),
+	'el' => array(
+	  'langid' => 'el_gr',
+	  'alttext' => urldecode('%CE%91%CE%BA%CE%BF%CF%8D%CF%83%CF%84%CE%B5%20%CE%B1%CF%85%CF%84%CE%AE%CE%BD%20%CF%84%CE%B7%CE%BD%20%CF%83%CE%B5%CE%BB%CE%AF%CE%B4%CE%B1%20%CF%87%CF%81%CE%B7%CF%83%CE%B9%CE%BC%CE%BF%CF%80%CE%BF%CE%B9%CF%8E%CE%BD%CF%84%CE%B1%CF%82%20ReadSpeaker'),
+	),
+	'hi' => array(
+	  'langid' => 'hi_in',
+	  'alttext' => 'Listen to this page using ReadSpeaker',
+	),	
+	'it' => array(
+      'langid' => 'it_it',
+      'alttext' => 'Ascolta questa pagina con ReadSpeaker',
+    ),
+	'jp' => array(
+	  'langid' => 'ja_jp',
+	  'alttext' => 'Listen to this page using ReadSpeaker',
+	),
+	'ko' => array(
+	  'langid' => 'ko_kr',
+	  'alttext' => 'Listen to this page using ReadSpeaker',
+	),
+	'nl' => array(
+      'langid' => 'nl_nl',
+      'alttext' => 'Laat de tekst voorlezen met ReadSpeaker',
+    ),
+    'nb' => array(
+      'langid' => 'no_nb',
+      'alttext' => 'Lytt til denne siden med ReadSpeaker',
+    ),
+	'pt-pt' => array(
+      'langid' => 'pt_pt',
+      'alttext' => 'Ouvir com ReadSpeaker',
+    ),
+	'pt' => array(
+      'langid' => 'pt_pt',
+      'alttext' => 'Ouvir com ReadSpeaker',
+    ),
+	'ru' => array(
+	  'langid' => 'ru_ru',
+	  'alttext' => urldecode('%D0%9F%D1%80%D0%BE%D1%81%D0%BB%D1%83%D1%88%D0%B0%D1%82%D1%8C%20%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D1%83%20%D0%BF%D1%80%D0%B8%20%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D0%B8%20ReadSpeaker'),
+	),
+	'sv' => array(
+      'langid' => 'sv_se',
+      'alttext' => 'Lyssna p&aring; sidans text med ReadSpeaker',
+    ),
+	'tr' => array(
+	  'langid' => 'tr_tr',
+	  'alttext' => urldecode('Bu%20sayfay%C4%B1%20ReadSpeaker%20ile%20dinle'),
+	),
+	'zh' => array(
+	  'langid' => 'zh_cn',
+	  'alttext' => urldecode('%E8%AE%A9ReadSpeaker%E4%B8%BA%E4%BD%A0%E6%9C%97%E8%AF%BB%E9%A1%B5%E9%9D%A2'),
+	),
+  );
+
+  $readspeaker_prefer_uk = variable_get('readspeaker_prefer_uk', FALSE);
+  if ($readspeaker_prefer_uk) {
+    $readspeaker_languages['en']['langid'] = 'en_uk';
+  }
+
+  return $readspeaker_languages;
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * Insert 'ReadSpeaker' link into content management menu
+ */
+function readspeaker_hl_menu() {
+  $items = array();
+  $items['admin/config/content/readspeaker_hl'] = array(
+    'title' => 'ReadSpeaker Enterprise Highlighting',
+    'description' => 'Insert ReadSpeaker Enterprise Highlighting to selected node types.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('readspeaker_hl_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+* Page callback: Current posts settings
+*
+* @see current_posts_menu()
+*/
+function readspeaker_hl_form($form, &$form_state) {
+  $form['general_settings'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#title' => t('General settings for ReadSpeaker'),
+    '#description' => t('The ReadSpeaker module requires an own account at <a href="http://www.readspeaker.com" target="_blank">ReadSpeaker</a>.'),
+  );
+  
+  $form['general_settings']['readspeaker_accountid'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Enter your ReadSpeaker ID'),
+    '#default_value' => variable_get('readspeaker_accountid', ''),
+    '#description' => t('Enter your ReadSpeaker ID from <a href="https://admin.readspeaker.com/portal" target="_blank">https://admin.readspeaker.com/portal</a>.'),
+    '#required' => TRUE,
+  );
+  $form['general_settings']['readspeaker_langid'] = array(
+    '#type' => 'select',
+    '#title' => t('Language'),
+    '#default_value' => variable_get('readspeaker_langid', ''),
+    '#options' => array(
+      'en' => t('American English'),
+      'en_au' => t('Australian English'),
+		'ar' => t('Arabic'),
+		'eu' => t('Basque'),
+		'ca' => t('Catalan'),
+		'da' => t('Danish'),
+		'nl' => t('Dutch'),
+		'fo' => t('Faroese'),
+		'fi' => t('Finnish'),
+		'fr' => t('French'),
+		'fy' => t('Frisian'),
+		'gl' => t('Galician'),
+		'de' => t('German'),
+		'el' => t('Greek'),
+		'hi' => t('Hindi'),
+		'it' => t('Italian'),
+		'jp' => t('Japanese'),
+		'ko' => t('Korean'),
+		'zh' => t('Mandarin Chinese'),
+		'nb' => t('Norwegian'),
+		'pt' => t('Portuguese'),
+		'ru' => t('Russian'),
+		'es' => t('Spanish'),
+		'sv' => t('Swedish'),
+		'tr' => t('Turkish'),
+	),
+    '#description' => t('Select which language your ReadSpeaker account supports.'),
+    '#required' => TRUE,
+  );
+  $form['general_settings']['readspeaker_prefer_uk'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Prefer british english'),
+    '#default_value' => variable_get('readspeaker_prefer_uk', FALSE),
+    '#description' => t('Check this option, if you prefer british english and it is available on your account.'),
+    '#required' => FALSE,
+  );
+
+  // Layout settings for input ReadSpeaker into node
+  $form['layout_settings'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#title' => t('Layout settings'),
+    '#description' => t('Options to control display position of readspeaker on your website.'),
+  );
+  $form['layout_settings']['readspeaker_buttonstyle'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Style attribute for the ReadSpeaker Button.'),
+    '#default_value' => variable_get('readspeaker_buttonstyle', FALSE),
+    '#description' => t('Set a style attribute for the ReadSpeaker Button.'),
+    '#required' => FALSE,
+  );
+  $form['layout_settings']['readspeaker_customparam'] = array(
+	'#type' => 'textfield',
+	'#title' => t('Custom script parameters.'),
+	'#default_value' => variable_get('readspeaker_customparam', FALSE),
+	'#description' => t('Input any custom parameters given to you by ReadSpeaker Support here.'),
+	'#required' => FALSE,
+  );
+  // What kinds of nodes do we want to read by ReadSpeaker
+  $form['content_types'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#title' => t('Content types'),
+  );
+  $form['content_types']['readspeaker_nodes'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Content types'),
+    '#default_value' => variable_get('readspeaker_nodes', array()),
+    '#options' => array_map('check_plain', node_type_get_names()),
+    '#description' => t('Select content types to read by ReadSpeaker.'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * Insert 'display ReadSpeaker' permission
+ */
+function readspeaker_hl_permission() {
+  return array(
+    'display readspeaker_hl' => array(
+      'title' => t('display ReadSpeaker'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_node_view().
+ *
+ * Insert 'ReadSpeaker' theme functions into the currently active theme
+ */
+function readspeaker_hl_node_view($node, $build_mode = 'full') {
+	$node->content['readspeaker_hl'] = array(
+		'#markup' => theme('readspeaker_hl_button'),
+		'#weight' => -1,
+	);
+	$node->content['readspeaker_hl_end'] = array(
+		'#markup' => theme('readspeaker_hl_end'),
+		'#weight' => 1,
+	);
+}
+
+function readspeaker_hl_theme() {
+	return array(
+		'readspeaker_hl_button' => array(
+			'variables' => array('node' => NULL),
+		),
+		'readspeaker_hl_end' => array(
+			'variables' => array('node' => NULL),
+		),
+	);
+}
+
+/**
+ * Implements the ReadSpeaker Button
+ */
+
+function theme_readspeaker_hl_button() {
+
+	if (user_access('display readspeaker_hl')) {
+
+		global $language;
+		global $base_path;
+		
+		// Do nothing, if nodetype isn't selected or ReadSpeaker ID isn't set
+		$node_types = variable_get('readspeaker_nodes', array());
+		$accountid = variable_get('readspeaker_accountid', '');
+		$node = menu_get_object();
+		
+		if (isset($_SERVER["HTTPS"])) {
+			$protocol = 'https';
+		}
+		else {
+			$protocol = 'http';
+    }
+		if (empty($node->type) || empty($accountid)) {
+			return;
+		}
+		if (variable_get('readspeaker_buttonstyle', FALSE)) {
+			$button_style = " style='" . variable_get('readspeaker_buttonstyle', FALSE) . "'";
+		}
+		else {
+			$button_style = "";
+		}
+		$readspeaker_languages = readspeaker_hl_language_list();
+		$langid = variable_get('readspeaker_langid', FALSE);
+		if (variable_get('readspeaker_customparam', FALSE))
+		{
+			$customParam = "&".variable_get('readspeaker_customparam', FALSE);
+		} else {
+			$customParam = "";
+		}
+
+		// Add javascript to header
+		drupal_add_js($protocol."://f1.eu.readspeaker.com/script/$accountid/ReadSpeaker.js?cid=$accountid&pids=embhl$customParam", 'external');
+		
+		$nodeurl = $protocol . '://' . $_SERVER['SERVER_NAME'] . url('node/' . $node->nid);
+		
+		// Create output
+		$output = '<!-- RS_MODULE_CODE -->';
+		$output .= '<div id="readspeaker_button1" class="rs_skip rsbtn rs_preserve"'.$button_style.'>';
+		$output .= '<a class="rsbtn_play" title="' . $readspeaker_languages[$langid]['alttext'] . '" accesskey="L" href="' . $protocol . '://app.eu.readspeaker.com/cgi-bin/rsent?customerid=' . $accountid . '&amp;lang=' . $readspeaker_languages[$langid]['langid'] . '&amp;readid=rs_read_this&amp;url=' . urlencode($nodeurl) . '">';
+		$output .= '<span class="rsbtn_left rsimg rspart"><span class="rsbtn_text"><span>Listen</span></span></span>';
+		$output .= '<span class="rsbtn_right rsimg rsplay rspart"></span>';
+		$output .= '</a></div>';
+		$output .= '<div id="rs_read_this">';
+		
+		return $output;
+	
+	}
+}
+
+function theme_readspeaker_hl_end() {
+	$output = '</div>';
+	return $output;
+}
+
+
+?>
