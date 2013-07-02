@@ -122,11 +122,6 @@ function readspeaker_hl_language_list() {
 	),
   );
 
-  $readspeaker_prefer_uk = variable_get('readspeaker_prefer_uk', FALSE);
-  if ($readspeaker_prefer_uk) {
-    $readspeaker_languages['en']['langid'] = 'en_au';
-  }
-
   return $readspeaker_languages;
 }
 
@@ -176,39 +171,32 @@ function readspeaker_hl_form($form, &$form_state) {
     '#options' => array(
       'en' => t('American English'),
       'en_au' => t('Australian English'),
-		'ar' => t('Arabic'),
-		'eu' => t('Basque'),
-		'ca' => t('Catalan'),
-		'da' => t('Danish'),
-		'nl' => t('Dutch'),
-		'fo' => t('Faroese'),
-		'fi' => t('Finnish'),
-		'fr' => t('French'),
-		'fy' => t('Frisian'),
-		'gl' => t('Galician'),
-		'de' => t('German'),
-		'el' => t('Greek'),
-		'hi' => t('Hindi'),
-		'it' => t('Italian'),
-		'jp' => t('Japanese'),
-		'ko' => t('Korean'),
-		'zh' => t('Mandarin Chinese'),
-		'nb' => t('Norwegian'),
-		'pt' => t('Portuguese'),
-		'ru' => t('Russian'),
-		'es' => t('Spanish'),
-		'sv' => t('Swedish'),
-		'tr' => t('Turkish'),
-	),
+      'ar' => t('Arabic'),
+      'eu' => t('Basque'),
+      'ca' => t('Catalan'),
+      'da' => t('Danish'),
+      'nl' => t('Dutch'),
+      'fo' => t('Faroese'),
+      'fi' => t('Finnish'),
+      'fr' => t('French'),
+      'fy' => t('Frisian'),
+      'gl' => t('Galician'),
+      'de' => t('German'),
+      'el' => t('Greek'),
+      'hi' => t('Hindi'),
+      'it' => t('Italian'),
+      'jp' => t('Japanese'),
+      'ko' => t('Korean'),
+      'zh' => t('Mandarin Chinese'),
+      'nb' => t('Norwegian'),
+      'pt' => t('Portuguese'),
+      'ru' => t('Russian'),
+      'es' => t('Spanish'),
+      'sv' => t('Swedish'),
+      'tr' => t('Turkish'),
+    ),
     '#description' => t('Select which language your ReadSpeaker account supports.'),
     '#required' => TRUE,
-  );
-  $form['general_settings']['readspeaker_prefer_uk'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Prefer british english'),
-    '#default_value' => variable_get('readspeaker_prefer_uk', FALSE),
-    '#description' => t('Check this option, if you prefer british english and it is available on your account.'),
-    '#required' => FALSE,
   );
 
   // Layout settings for input ReadSpeaker into node
@@ -355,5 +343,62 @@ function theme_readspeaker_hl_end() {
 	return $output;
 }
 
+/**
+ * Implement hook_block_info();
+ */
+function readspeaker_hl_block_info() {
+  $blocks['readspeaker_hl'] = array(
+    'info' => t('Readspeaker Highlight'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implement hook_block_view();
+ */
+function readspeaker_hl_block_view($delta) {
+  $current_path = current_path();
+  switch ($delta) {
+    case 'readspeaker_hl':
+      $block['content'] = _generate_block_content($current_path);
+      break;
+  }
+  return $block; 
+}
+
+function _generate_block_content($current_path) {
+  GLOBAL $base_url;
+  // User ID set by Admin
+  $accountid = variable_get('readspeaker_accountid', '');
+  // Array of all Languages
+  $readspeaker_languages = readspeaker_hl_language_list();
+	// Variable set by admin
+  $langid = variable_get('readspeaker_langid', FALSE);
+
+  if(!$langid){
+    drupal_set_message(t('Please select a Language ID'));
+    return;
+  }
+
+  $content_path = $base_url . '/' . $current_path;
+  $content_path = urlencode($content_path);
+  $readspeaker_base_url = 'http://app.as.reaspeaker.com/cgi-bin/rsent?';
+  $customer_id = 'customerid='.$accountid;
+  $language = 'lang='.$langid;
+  $voice = 'voice=Lee';
+  $readid = 'readid=l2_txt_2col';
+  $url = 'url='.$content_path;
+
+  $readspeaker_href = $readspeaker_base_url . urlencode($customer_id . '&' . $language . '&' . $voice . '&' . $readid . '&' . $url);
+
+  $html  = '<div id="readspeaker_button1" class="rs_skip rsbtn rs_preserve">';
+  $html .= '<a class="rsbtn_play" accesskey="L" title="'.$readspeaker_languages[$langid]['alttext'].'" href="'.$readspeaker_href.'">';
+  $html .= '<span class="rsbtn_left rsimg rspart"><span class="rsbtn_text"><span>Listen</span></span></span>';
+  $html .= '<span class="rsbtn_right rsimg rsplay rspart"></span>';
+  $html .= '</a>';
+  $html .= '</div>';
+
+  return $html;
+}
 
 ?>
