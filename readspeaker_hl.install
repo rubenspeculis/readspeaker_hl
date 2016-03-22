@@ -34,6 +34,6 @@ function readspeaker_hl_uninstall() {
   variable_del('readspeaker_buttonstyle');
   variable_del('readspeaker_playerstyle');
   variable_del('readspeaker_nodes');
-  varrible_del('readspeaker_targetid');
-  varrible_set('readspeaker_voice');
+  variable_del('readspeaker_targetid');
+  variable_del('readspeaker_voice');
 }
