@@ -75,7 +75,7 @@ function readspeaker_hl_language_list() {
 	'hi' => array(
 	  'langid' => 'hi_in',
 	  'alttext' => 'Listen to this page using ReadSpeaker',
-	),	
+	),
 	'it' => array(
       'langid' => 'it_it',
       'alttext' => 'Ascolta questa pagina con ReadSpeaker',
@@ -156,7 +156,7 @@ function readspeaker_hl_form($form, &$form_state) {
     '#title' => t('General settings for ReadSpeaker'),
     '#description' => t('The ReadSpeaker module requires an own account at <a href="http://www.readspeaker.com" target="_blank">ReadSpeaker</a>.'),
   );
-  
+
   $form['general_settings']['readspeaker_accountid'] = array(
     '#type' => 'textfield',
     '#title' => t('Enter your ReadSpeaker ID'),
@@ -314,7 +314,7 @@ function readspeaker_hl_block_view($delta) {
         $block['content'] = _generate_block_content($current_path);
         break;
     }
-    return $block; 
+    return $block;
   }
 }
 
@@ -351,7 +351,7 @@ function _generate_block_content($current_path) {
   // Set variables for url call.
   $content_path = $base_url . '/' . $current_path;
   $content_path = urlencode($content_path);
-  $readspeaker_base_url = 'http://app.as.reaspeaker.com/cgi-bin/rsent?';
+  $readspeaker_base_url = 'http://app-eu.readspeaker.com/cgi-bin/rsent?';
   $customer_id = 'customerid='.$accountid;
   $language = 'lang='.$langid;
   $voice = 'voice='.$voice_admin;
